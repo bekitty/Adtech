@@ -11,6 +11,7 @@ interface AuthState {
   loginWithGoogle: () => Promise<boolean>
   logout: () => void
   selectRole: (role: UserRole) => void
+  clearRole: () => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,17 +23,17 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (email: string, password: string) => {
         // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 800))
 
-        // For demo, accept any email with password "password"
-        if (password === 'password' || password.length >= 6) {
+        // For demo, accept any email with password length >= 6
+        if (password.length >= 6) {
           // Find user or create mock user
           const existingUser = mockUsers.find(u => u.email === email)
           const user: User = existingUser || {
             id: `user-${Date.now()}`,
             email,
             name: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
-            role: 'advertiser', // Default role, will be selected after login
+            role: 'advertiser',
             createdAt: new Date().toISOString(),
           }
 
@@ -44,7 +45,7 @@ export const useAuthStore = create<AuthState>()(
 
       loginWithGoogle: async () => {
         // Simulate Google OAuth
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 800))
 
         const user: User = {
           id: `user-google-${Date.now()}`,
@@ -60,6 +61,10 @@ export const useAuthStore = create<AuthState>()(
 
       logout: () => {
         set({ user: null, isAuthenticated: false, selectedRole: null })
+      },
+
+      clearRole: () => {
+        set({ selectedRole: null })
       },
 
       selectRole: (role: UserRole) => {

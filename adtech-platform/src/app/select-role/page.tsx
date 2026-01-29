@@ -1,16 +1,22 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { useAuthStore } from '@/store/auth'
+import { Logo } from '@/components/layout/Logo'
 import { ArrowLeft } from 'lucide-react'
 
 export default function SelectRolePage() {
   const router = useRouter()
-  const { selectRole, logout } = useAuthStore()
+  const { selectRole, logout, user } = useAuthStore()
+  const [loadingRole, setLoadingRole] = useState<'publisher' | 'advertiser' | null>(null)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const handleSelectRole = (role: 'publisher' | 'advertiser') => {
+  const handleSelectRole = async (role: 'publisher' | 'advertiser') => {
+    setLoadingRole(role)
+    // Small delay for UX feedback
+    await new Promise(resolve => setTimeout(resolve, 300))
     selectRole(role)
     if (role === 'publisher') {
       router.push('/publisher/dashboard')
@@ -19,7 +25,9 @@ export default function SelectRolePage() {
     }
   }
 
-  const handleBack = () => {
+  const handleBack = async () => {
+    setIsLoggingOut(true)
+    await new Promise(resolve => setTimeout(resolve, 300))
     logout()
     router.push('/login')
   }
@@ -27,16 +35,27 @@ export default function SelectRolePage() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Top bar */}
-      <div className="h-12 bg-black" />
+      <div className="h-12 bg-[#1a1a2e]" />
 
       {/* Main content */}
       <div className="flex-1 flex items-center justify-center p-4">
         <div className="w-full max-w-3xl">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <div className="flex justify-center mb-6">
+              <Logo size="lg" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Welcome, {user?.name || 'User'}!
+            </h1>
+            <p className="text-gray-500 mt-2">Select your role to continue</p>
+          </div>
+
           <div className="flex gap-8 justify-center">
             {/* Publisher Card */}
-            <div className="w-72 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center">
+            <div className="w-72 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center hover:shadow-lg hover:border-purple-200 transition-all duration-300 group">
               {/* Illustration */}
-              <div className="w-32 h-32 mb-6 flex items-center justify-center">
+              <div className="w-32 h-32 mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                 <svg viewBox="0 0 120 100" className="w-full h-full">
                   {/* Monitor */}
                   <rect x="15" y="10" width="90" height="60" rx="4" fill="#FDF2F8" stroke="#EC4899" strokeWidth="2" />
@@ -56,21 +75,25 @@ export default function SelectRolePage() {
                 </svg>
               </div>
 
-              <p className="text-gray-600 text-sm">Continue as</p>
+              <p className="text-gray-500 text-sm">Continue as</p>
               <h2 className="text-xl font-bold text-gray-900 mb-4">Publisher</h2>
+              <p className="text-xs text-gray-400 mb-4 text-center">Manage inventory, deals & monetization</p>
 
               <Button
                 variant="gradient"
                 onClick={() => handleSelectRole('publisher')}
+                loading={loadingRole === 'publisher'}
+                disabled={loadingRole === 'advertiser' || isLoggingOut}
+                className="w-full"
               >
                 Continue
               </Button>
             </div>
 
             {/* Advertiser Card */}
-            <div className="w-72 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center">
+            <div className="w-72 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center hover:shadow-lg hover:border-purple-200 transition-all duration-300 group">
               {/* Illustration */}
-              <div className="w-32 h-32 mb-6 flex items-center justify-center">
+              <div className="w-32 h-32 mb-6 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
                 <svg viewBox="0 0 120 100" className="w-full h-full">
                   {/* Megaphone */}
                   <ellipse cx="75" cy="50" rx="25" ry="30" fill="#FDF2F8" />
@@ -91,12 +114,16 @@ export default function SelectRolePage() {
                 </svg>
               </div>
 
-              <p className="text-gray-600 text-sm">Continue as</p>
+              <p className="text-gray-500 text-sm">Continue as</p>
               <h2 className="text-xl font-bold text-gray-900 mb-4">Advertiser</h2>
+              <p className="text-xs text-gray-400 mb-4 text-center">Create campaigns, manage creatives & analytics</p>
 
               <Button
                 variant="default"
                 onClick={() => handleSelectRole('advertiser')}
+                loading={loadingRole === 'advertiser'}
+                disabled={loadingRole === 'publisher' || isLoggingOut}
+                className="w-full"
               >
                 Continue
               </Button>
@@ -108,17 +135,19 @@ export default function SelectRolePage() {
             <Button
               variant="outline"
               onClick={handleBack}
+              loading={isLoggingOut}
+              disabled={loadingRole !== null}
               className="gap-2"
             >
-              <ArrowLeft className="w-4 h-4" />
-              Back
+              {!isLoggingOut && <ArrowLeft className="w-4 h-4" />}
+              Back to Login
             </Button>
           </div>
         </div>
       </div>
 
       {/* Bottom bar */}
-      <div className="h-12 bg-black" />
+      <div className="h-12 bg-[#1a1a2e]" />
     </div>
   )
 }
