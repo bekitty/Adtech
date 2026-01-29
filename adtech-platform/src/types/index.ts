@@ -37,7 +37,7 @@ export interface Inventory {
   tagType: 'GPT' | 'Prebid'
   adUnitPath: string
   pageCategory: string
-  status: 'active' | 'inactive'
+  status: 'active' | 'inactive' | 'paused'
   createdAt: string
 }
 
@@ -90,7 +90,7 @@ export interface Campaign {
   targeting: {
     geo: string[]
     devices: ('Mobile' | 'Tablet' | 'Desktop')[]
-    os: ('iOS' | 'Android')[]
+    os: string[]
     browsers: string[]
     adSlots: string[]
     contextualCategories: string[]
