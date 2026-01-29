@@ -81,7 +81,7 @@ export default function SelectRolePage() {
 
               <div className="mt-auto pt-4 w-full">
                 <Button
-                  variant="gradient"
+                  variant="default"
                   onClick={() => handleSelectRole('publisher')}
                   loading={loadingRole === 'publisher'}
                   disabled={loadingRole === 'advertiser' || isLoggingOut}
