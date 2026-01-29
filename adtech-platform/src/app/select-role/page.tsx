@@ -51,7 +51,7 @@ export default function SelectRolePage() {
             <p className="text-gray-500 mt-2">Select your role to continue</p>
           </div>
 
-          <div className="flex gap-8 justify-center">
+          <div className="flex gap-8 justify-center items-stretch">
             {/* Publisher Card */}
             <div className="w-72 bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center hover:shadow-lg hover:border-purple-200 transition-all duration-300 group">
               {/* Illustration */}
@@ -76,18 +76,20 @@ export default function SelectRolePage() {
               </div>
 
               <p className="text-gray-500 text-sm">Continue as</p>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Publisher</h2>
-              <p className="text-xs text-gray-400 mb-4 text-center">Manage inventory, deals & monetization</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Publisher</h2>
+              <p className="text-xs text-gray-400 text-center h-8 flex items-center">Manage inventory, deals & monetization</p>
 
-              <Button
-                variant="gradient"
-                onClick={() => handleSelectRole('publisher')}
-                loading={loadingRole === 'publisher'}
-                disabled={loadingRole === 'advertiser' || isLoggingOut}
-                className="w-full"
-              >
-                Continue
-              </Button>
+              <div className="mt-auto pt-4 w-full">
+                <Button
+                  variant="default"
+                  onClick={() => handleSelectRole('publisher')}
+                  loading={loadingRole === 'publisher'}
+                  disabled={loadingRole === 'advertiser' || isLoggingOut}
+                  className="w-full"
+                >
+                  Continue
+                </Button>
+              </div>
             </div>
 
             {/* Advertiser Card */}
@@ -115,18 +117,20 @@ export default function SelectRolePage() {
               </div>
 
               <p className="text-gray-500 text-sm">Continue as</p>
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Advertiser</h2>
-              <p className="text-xs text-gray-400 mb-4 text-center">Create campaigns, manage creatives & analytics</p>
+              <h2 className="text-xl font-bold text-gray-900 mb-2">Advertiser</h2>
+              <p className="text-xs text-gray-400 text-center h-8 flex items-center">Create campaigns, manage creatives & analytics</p>
 
-              <Button
-                variant="default"
-                onClick={() => handleSelectRole('advertiser')}
-                loading={loadingRole === 'advertiser'}
-                disabled={loadingRole === 'publisher' || isLoggingOut}
-                className="w-full"
-              >
-                Continue
-              </Button>
+              <div className="mt-auto pt-4 w-full">
+                <Button
+                  variant="default"
+                  onClick={() => handleSelectRole('advertiser')}
+                  loading={loadingRole === 'advertiser'}
+                  disabled={loadingRole === 'publisher' || isLoggingOut}
+                  className="w-full"
+                >
+                  Continue
+                </Button>
+              </div>
             </div>
           </div>
 
